@@ -1,0 +1,115 @@
+export const Colors = {
+  bg: '#0A0E16',
+  surface: '#111726',
+  surface2: '#161D2E',
+  line: 'rgba(255,255,255,0.08)',
+  line2: 'rgba(255,255,255,0.13)',
+  text: '#F2F5F8',
+  muted: '#8B93A6',
+  green: '#16E08A',
+  greenDeep: '#0E9D63',
+  greenBg: 'rgba(22,224,138,0.12)',
+  greenBorder: 'rgba(22,224,138,0.4)',
+  live: '#FF4D4D',
+  liveBg: 'rgba(255,77,77,0.14)',
+  gold: '#F6C544',
+};
+
+export const TeamColors: Record<string, { bg: string; text: string }> = {
+  ARG: { bg: '#6CACE4', text: '#0a2540' },
+  MEX: { bg: '#006847', text: '#fff' },
+  BRA: { bg: '#F7D117', text: '#1a1a1a' },
+  FRA: { bg: '#1E3A8A', text: '#fff' },
+  ESP: { bg: '#C8102E', text: '#fff' },
+  GER: { bg: '#1A1A1A', text: '#fff' },
+  ENG: { bg: '#E8EAED', text: '#1a1a1a' },
+  POR: { bg: '#101820', text: '#fff' },
+  NED: { bg: '#F36C21', text: '#fff' },
+  CRO: { bg: '#C8102E', text: '#fff' },
+  NOR: { bg: '#BA0C2F', text: '#fff' },
+  NGA: { bg: '#046A38', text: '#fff' },
+  USA: { bg: '#1B2A6B', text: '#fff' },
+  GHA: { bg: '#046A38', text: '#fff' },
+  CRC: { bg: '#C8102E', text: '#fff' },
+  POL: { bg: '#DC143C', text: '#fff' },
+  KSA: { bg: '#006C35', text: '#fff' },
+  JPN: { bg: '#1E3A8A', text: '#fff' },
+  URU: { bg: '#5CB0C0', text: '#fff' },
+  COL: { bg: '#FCD116', text: '#1a1a1a' },
+  ECU: { bg: '#FFD100', text: '#1a1a1a' },
+  CHI: { bg: '#D52B1E', text: '#fff' },
+  PER: { bg: '#D91023', text: '#fff' },
+  VEN: { bg: '#CF142B', text: '#fff' },
+  CAN: { bg: '#FF0000', text: '#fff' },
+  MAR: { bg: '#C1272D', text: '#fff' },
+  SEN: { bg: '#00853F', text: '#fff' },
+  CMR: { bg: '#007A5E', text: '#fff' },
+  TUN: { bg: '#E70013', text: '#fff' },
+  EGY: { bg: '#CE1126', text: '#fff' },
+  ALG: { bg: '#006233', text: '#fff' },
+  CIV: { bg: '#F77F00', text: '#fff' },
+  AUS: { bg: '#00843D', text: '#fff' },
+  IRN: { bg: '#239F40', text: '#fff' },
+  KOR: { bg: '#003478', text: '#fff' },
+  QAT: { bg: '#8D1B3D', text: '#fff' },
+  SAU: { bg: '#006C35', text: '#fff' },
+  IRQ: { bg: '#007A3D', text: '#fff' },
+  SUI: { bg: '#FF0000', text: '#fff' },
+  BEL: { bg: '#000000', text: '#fff' },
+  DEN: { bg: '#C60C30', text: '#fff' },
+  AUT: { bg: '#ED2939', text: '#fff' },
+  SRB: { bg: '#C6363C', text: '#fff' },
+  SVK: { bg: '#0B4EA2', text: '#fff' },
+  CZE: { bg: '#D7141A', text: '#fff' },
+  HUN: { bg: '#436F4D', text: '#fff' },
+  GRE: { bg: '#0D5EAF', text: '#fff' },
+  TUR: { bg: '#E30A17', text: '#fff' },
+  UKR: { bg: '#005BBB', text: '#fff' },
+  SCO: { bg: '#003865', text: '#fff' },
+  WAL: { bg: '#C8102E', text: '#fff' },
+  RSA: { bg: '#007A4D', text: '#fff' },
+  ZIM: { bg: '#006400', text: '#fff' },
+  BOL: { bg: '#D52B1E', text: '#fff' },
+  PAR: { bg: '#D52B1E', text: '#fff' },
+  HON: { bg: '#0073CF', text: '#fff' },
+  SLV: { bg: '#0F47AF', text: '#fff' },
+  PAN: { bg: '#DA121A', text: '#fff' },
+  JAM: { bg: '#000000', text: '#FFD700' },
+};
+
+export function getTeamColor(code: string) {
+  return TeamColors[code] ?? { bg: '#2A3350', text: '#fff' };
+}
+
+// Mapa nombre completo → código FIFA 3 letras
+export const TeamCode: Record<string, string> = {
+  // Américas
+  'Argentina': 'ARG', 'Mexico': 'MEX', 'Brazil': 'BRA', 'USA': 'USA',
+  'United States': 'USA', 'Canada': 'CAN', 'Uruguay': 'URU', 'Colombia': 'COL',
+  'Ecuador': 'ECU', 'Chile': 'CHI', 'Peru': 'PER', 'Venezuela': 'VEN',
+  'Bolivia': 'BOL', 'Paraguay': 'PAR', 'Honduras': 'HON', 'El Salvador': 'SLV',
+  'Panama': 'PAN', 'Jamaica': 'JAM', 'Costa Rica': 'CRC', 'Haiti': 'HAI',
+  'Curaçao': 'CUW',
+  // Europa
+  'France': 'FRA', 'Spain': 'ESP', 'Germany': 'GER', 'England': 'ENG',
+  'Portugal': 'POR', 'Netherlands': 'NED', 'Croatia': 'CRO', 'Norway': 'NOR',
+  'Poland': 'POL', 'Switzerland': 'SUI', 'Belgium': 'BEL', 'Denmark': 'DEN',
+  'Austria': 'AUT', 'Serbia': 'SRB', 'Slovakia': 'SVK', 'Czechia': 'CZE',
+  'Hungary': 'HUN', 'Greece': 'GRE', 'Turkey': 'TUR', 'Türkiye': 'TUR',
+  'Ukraine': 'UKR', 'Scotland': 'SCO', 'Wales': 'WAL',
+  'Bosnia & Herzegovina': 'BIH', 'Bosnia-Herzegovina': 'BIH', 'Sweden': 'SWE',
+  // África
+  'Morocco': 'MAR', 'Senegal': 'SEN', 'Tunisia': 'TUN', 'Egypt': 'EGY',
+  'Algeria': 'ALG', 'Ivory Coast': 'CIV', "Côte d'Ivoire": 'CIV',
+  'Ghana': 'GHA', 'Nigeria': 'NGA', 'Cameroon': 'CMR', 'South Africa': 'RSA',
+  'DR Congo': 'COD', 'Congo DR': 'COD', 'Cape Verde': 'CPV', 'Cape Verde Islands': 'CPV',
+  // Asia / Oceanía
+  'Saudi Arabia': 'KSA', 'Japan': 'JPN', 'South Korea': 'KOR', 'Iran': 'IRN',
+  'Australia': 'AUS', 'Qatar': 'QAT', 'Iraq': 'IRQ', 'Jordan': 'JOR',
+  'Uzbekistan': 'UZB', 'New Zealand': 'NZL',
+};
+
+export function getCode(name: string | null | undefined): string {
+  if (!name) return '?';
+  return TeamCode[name] ?? name.slice(0, 3).toUpperCase();
+}
