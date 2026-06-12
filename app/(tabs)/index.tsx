@@ -65,7 +65,8 @@ export default function HomeScreen() {
   }, [matches, filterTeam]);
 
   // Partidos sin filtro (próximos)
-  const moreMatches = upcoming.slice(1);
+  // Si hay partido en vivo, mostrar TODOS los próximos (no saltear el primero)
+  const moreMatches = liveMatches.length > 0 ? upcoming : upcoming.slice(1);
 
   useEffect(() => {
     if (!nextMatch || filterTeam) return;
