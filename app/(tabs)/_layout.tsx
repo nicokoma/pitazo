@@ -56,7 +56,6 @@ function TabLayoutInner() {
           tabBarIcon: ({ color }) => <Ionicons name="stats-chart-outline" size={26} color={color} />,
         }}
       />
-      <Tabs.Screen name="live" options={{ tabBarButton: () => null }} />
     </Tabs>
   );
 }
