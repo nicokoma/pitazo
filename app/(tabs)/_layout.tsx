@@ -24,34 +24,36 @@ function TabLayoutInner() {
           paddingBottom: bottomPad,
         },
         tabBarLabelStyle: styles.label,
+        tabBarIconStyle: { marginTop: 4 },
+        tabBarItemStyle: { flex: 1, justifyContent: 'center', alignItems: 'center' },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: 'Partidos',
-          tabBarIcon: ({ color, size }) => <Ionicons name="list" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="list" size={26} color={color} />,
         }}
       />
       <Tabs.Screen
         name="calendar"
         options={{
           title: 'Calendario',
-          tabBarIcon: ({ color, size }) => <Ionicons name="calendar-outline" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="calendar-outline" size={26} color={color} />,
         }}
       />
       <Tabs.Screen
         name="scorers"
         options={{
           title: 'Goleadores',
-          tabBarIcon: ({ color, size }) => <Ionicons name="football-outline" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="football-outline" size={26} color={color} />,
         }}
       />
       <Tabs.Screen
         name="groups"
         options={{
           title: 'Grupos',
-          tabBarIcon: ({ color, size }) => <Ionicons name="stats-chart-outline" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="stats-chart-outline" size={26} color={color} />,
         }}
       />
       <Tabs.Screen name="live" options={{ tabBarButton: () => null }} />
