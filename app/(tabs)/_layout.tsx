@@ -24,8 +24,8 @@ function TabLayoutInner() {
           paddingBottom: bottomPad,
         },
         tabBarLabelStyle: styles.label,
-        tabBarIconStyle: { marginTop: 4 },
-        tabBarItemStyle: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+        tabBarIconStyle: { marginTop: 2 },
+        tabBarItemStyle: { flex: 1, paddingVertical: 6 },
       }}
     >
       <Tabs.Screen

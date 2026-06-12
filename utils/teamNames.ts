@@ -29,7 +29,7 @@ export const TEAM_ES: Record<string, string> = {
   'Austria':          'Austria',
   'Sweden':           'Suecia',
   'Scotland':         'Escocia',
-  'Czechia':          'República Checa',
+  'Czechia':          'Chequia',
   'Turkey':           'Turquía',
   'Bosnia-Herzegovina': 'Bosnia y Herzegovina',
 
