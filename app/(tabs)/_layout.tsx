@@ -41,10 +41,10 @@ function TabLayoutInner() {
         }}
       />
       <Tabs.Screen
-        name="live"
+        name="scorers"
         options={{
-          title: 'En vivo',
-          tabBarIcon: ({ color, size }) => <Ionicons name="play-circle-outline" size={size} color={color} />,
+          title: 'Goleadores',
+          tabBarIcon: ({ color, size }) => <Ionicons name="football-outline" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -54,6 +54,7 @@ function TabLayoutInner() {
           tabBarIcon: ({ color, size }) => <Ionicons name="stats-chart-outline" size={size} color={color} />,
         }}
       />
+      <Tabs.Screen name="live" options={{ tabBarButton: () => null }} />
     </Tabs>
   );
 }

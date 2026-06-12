@@ -204,15 +204,15 @@ export default function CalendarScreen() {
       )}
 
       {/* Filtros de fase */}
-      {!showDatePicker && (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.phaseBar} contentContainerStyle={styles.phaseContent}>
+      <View style={styles.phaseBar}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.phaseContent}>
           {PHASES.map(p => (
             <TouchableOpacity key={p} onPress={() => setActivePhase(p)} style={[styles.phaseChip, activePhase === p && styles.phaseChipActive]}>
               <Text style={[styles.phaseText, activePhase === p && styles.phaseTextActive]}>{p}</Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
-      )}
+      </View>
 
       {loading && matches.length === 0 ? (
         <ActivityIndicator color={Colors.green} style={{ marginTop: 40 }} />
@@ -307,16 +307,16 @@ const styles = StyleSheet.create({
   pickerDone: { color: Colors.green, fontSize: 15, fontWeight: '700' },
   datePicker: { height: 340 },
 
-  phaseBar: { height: 48, flexShrink: 0 },
-  phaseContent: { paddingHorizontal: 20, gap: 8, alignItems: 'center' },
+  phaseBar: { height: 52, flexShrink: 0, justifyContent: 'center' },
+  phaseContent: { paddingHorizontal: 20, gap: 8, alignItems: 'center', flexDirection: 'row' },
   phaseChip: { paddingHorizontal: 16, height: 36, borderRadius: 18, backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.line, justifyContent: 'center', alignItems: 'center' },
   phaseChipActive: { backgroundColor: Colors.green, borderColor: Colors.green },
   phaseText: { color: Colors.muted, fontSize: 13, fontWeight: '600' },
   phaseTextActive: { color: '#06210f' },
 
-  scrollContent: { paddingBottom: 120, flexGrow: 1 },
+  scrollContent: { paddingBottom: 120 },
 
-  empty: { flex: 1, paddingTop: 60, alignItems: 'center', gap: 10 },
+  empty: { paddingTop: 24, alignItems: 'center', gap: 10 },
   emptyEmoji: { fontSize: 36 },
   emptyText: { color: Colors.muted, fontSize: 14, textAlign: 'center', paddingHorizontal: 30 },
 

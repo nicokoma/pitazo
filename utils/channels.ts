@@ -1,34 +1,49 @@
-// Derechos de TV del Mundial 2026 en Argentina (ilustrativos — confirmar cerca del torneo)
-// Flow y DirecTV transmiten via DSports. TV Pública tiene partidos seleccionados.
+// Derechos de TV del Mundial 2026 en Argentina
+// Fuente: fixture oficial de transmisiones
+// DSports se ve por DirecTV y Flow
 
 export type Channel = {
   name: string;
   short: string;
-  green: boolean; // true = resaltar (servicio del usuario)
+  green: boolean;
 };
 
-// Partidos que van por TV Pública (señal abierta) — típicamente: inauguración, Argentina, semis, final
-const TV_PUBLICA_MATCH_IDS = new Set<number>(); // se completa con IDs reales cuando se confirmen
+// Equipos que tienen Telefe
+const TELEFE_TEAMS = new Set([
+  'Mexico', 'Brazil', 'Netherlands', 'Germany', 'Ecuador', 'Uruguay',
+  'Argentina', 'Portugal', 'England', 'Colombia', 'Norway', 'Panama',
+  'Paraguay', 'Australia',
+]);
 
-// Por ahora: todos los partidos van por DSports (Flow + DirecTV)
-// TV Pública se agrega para partidos de Argentina y finales
+// Equipos que tienen TyC Sports
+const TYC_TEAMS = new Set([
+  'Argentina', 'Brazil', 'Uruguay', 'Mexico', 'United States', 'Colombia',
+  'Norway', 'Ivory Coast', 'Saudi Arabia', 'South Korea', 'Haiti',
+  'Australia', 'Turkey', 'Netherlands', 'Belgium', 'Iran',
+]);
+
 export function getChannels(matchId: number, stage: string, homeTeam: string, awayTeam: string): Channel[] {
   const channels: Channel[] = [];
 
   const isArgentina = homeTeam === 'Argentina' || awayTeam === 'Argentina';
-  const isFinal = stage === 'FINAL' || stage === 'SEMI_FINALS';
-  const isOpeningMatch = matchId === 537327; // primer partido del fixture
+  const isFinal = stage === 'FINAL' || stage === 'SEMI_FINALS' || stage === 'QUARTER_FINALS' || stage === 'ROUND_OF_16';
+  const hasTelefe = TELEFE_TEAMS.has(homeTeam) || TELEFE_TEAMS.has(awayTeam) || isFinal;
+  const hasTyC = TYC_TEAMS.has(homeTeam) || TYC_TEAMS.has(awayTeam) || isFinal;
 
-  // TV Pública: partidos de Argentina, semis, final e inauguración
-  if (isArgentina || isFinal || isOpeningMatch || TV_PUBLICA_MATCH_IDS.has(matchId)) {
+  if (isArgentina) {
     channels.push({ name: 'TV PÚBLICA', short: 'TV PÚB', green: false });
   }
 
-  // DSports via Flow
-  channels.push({ name: 'FLOW', short: 'FLOW', green: false });
+  if (hasTelefe) {
+    channels.push({ name: 'TELEFE', short: 'TEL', green: false });
+  }
 
-  // DSports via DirecTV
-  channels.push({ name: 'DIRECTV', short: 'DTV', green: false });
+  if (hasTyC) {
+    channels.push({ name: 'TyC SPORTS', short: 'TyC', green: false });
+  }
+
+  // DSports: todos los partidos (vía DirecTV y Flow)
+  channels.push({ name: 'DSPORTS', short: 'DSP', green: false });
 
   return channels;
 }
