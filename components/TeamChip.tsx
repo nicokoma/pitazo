@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native'; // Text kept for fallback
 import { getCode } from '../constants/theme';
 
 // FIFA 3-letter → ISO 2-letter para emoji de bandera
@@ -24,17 +24,13 @@ const ISO2: Record<string, string> = {
 
 // Banderas PNG para equipos con emojis no soportados en Android
 const PNG_FLAGS: Record<string, any> = {
-  SCO: require('../assets/flags/escocia-emoji5.png'),
+  SCO: require('../assets/flags/escocia-emoji6.png'),
 };
 
-function getFlagEmoji(code3: string): string {
+function getFlagUri(code3: string): string | null {
   const iso2 = ISO2[code3];
-  if (!iso2) return '🏳️';
-  return iso2
-    .toUpperCase()
-    .split('')
-    .map(c => String.fromCodePoint(0x1F1E6 - 65 + c.charCodeAt(0)))
-    .join('');
+  if (!iso2) return null;
+  return `https://flagcdn.com/64x48/${iso2.toLowerCase()}.png`;
 }
 
 type Size = 'sm' | 'md' | 'lg';
@@ -54,13 +50,16 @@ export function TeamChip({ name, size = 'md' }: Props) {
   const code = getCode(name);
   const s = sizes[size];
   const pngFlag = PNG_FLAGS[code];
+  const flagUri = getFlagUri(code);
 
   return (
     <View style={[styles.chip, { width: s.box, height: s.box, borderRadius: s.radius }]}>
       {pngFlag ? (
-        <Image source={pngFlag} style={{ width: s.box, height: s.box, borderRadius: s.radius, opacity: 1 }} resizeMode="cover" />
+        <Image source={pngFlag} style={{ width: s.box, height: s.box, borderRadius: s.radius }} resizeMode="cover" />
+      ) : flagUri ? (
+        <Image source={{ uri: flagUri }} style={{ width: s.box, height: s.box, borderRadius: s.radius }} resizeMode="cover" />
       ) : (
-        <Text style={{ fontSize: s.font, lineHeight: s.box, opacity: 1 }}>{getFlagEmoji(code)}</Text>
+        <Text style={{ fontSize: s.font, lineHeight: s.box }}>🏳️</Text>
       )}
     </View>
   );
