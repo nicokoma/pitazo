@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import { getCode } from '../constants/theme';
 
 // FIFA 3-letter → ISO 2-letter para emoji de bandera
@@ -22,14 +22,12 @@ const ISO2: Record<string, string> = {
   IRQ: 'IQ', JOR: 'JO', UZB: 'UZ', NZL: 'NZ',
 };
 
-const DIRECT_FLAGS: Record<string, string> = {
-  SCO: '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
-  WAL: '🏴󠁧󠁢󠁷󠁬󠁳󠁿',
-  ENG: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+// Banderas PNG para equipos con emojis no soportados en Android
+const PNG_FLAGS: Record<string, any> = {
+  SCO: require('../assets/flags/escocia-emoji.png'),
 };
 
 function getFlagEmoji(code3: string): string {
-  if (DIRECT_FLAGS[code3]) return DIRECT_FLAGS[code3];
   const iso2 = ISO2[code3];
   if (!iso2) return '🏳️';
   return iso2
@@ -54,12 +52,16 @@ type Props = {
 
 export function TeamChip({ name, size = 'md' }: Props) {
   const code = getCode(name);
-  const flag = getFlagEmoji(code);
   const s = sizes[size];
+  const pngFlag = PNG_FLAGS[code];
 
   return (
     <View style={[styles.chip, { width: s.box, height: s.box, borderRadius: s.radius }]}>
-      <Text style={{ fontSize: s.font, lineHeight: s.box }}>{flag}</Text>
+      {pngFlag ? (
+        <Image source={pngFlag} style={{ width: s.box, height: s.box, borderRadius: s.radius }} resizeMode="cover" />
+      ) : (
+        <Text style={{ fontSize: s.font, lineHeight: s.box }}>{getFlagEmoji(code)}</Text>
+      )}
     </View>
   );
 }
