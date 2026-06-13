@@ -58,9 +58,9 @@ export function TeamChip({ name, size = 'md' }: Props) {
   return (
     <View style={[styles.chip, { width: s.box, height: s.box, borderRadius: s.radius }]}>
       {pngFlag ? (
-        <Image source={pngFlag} style={{ width: s.box, height: s.box, borderRadius: s.radius }} resizeMode="cover" />
+        <Image source={pngFlag} style={{ width: s.box, height: s.box, borderRadius: s.radius, opacity: 1 }} resizeMode="cover" />
       ) : (
-        <Text style={{ fontSize: s.font, lineHeight: s.box }}>{getFlagEmoji(code)}</Text>
+        <Text style={{ fontSize: s.font, lineHeight: s.box, opacity: 1 }}>{getFlagEmoji(code)}</Text>
       )}
     </View>
   );
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   chip: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,1)',
+    backgroundColor: 'rgba(255,255,255,0.06)',
     overflow: 'hidden',
   },
 });
