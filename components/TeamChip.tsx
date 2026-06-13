@@ -13,7 +13,7 @@ const ISO2: Record<string, string> = {
   FRA: 'FR', ESP: 'ES', GER: 'DE', ENG: 'GB', POR: 'PT', NED: 'NL',
   CRO: 'HR', NOR: 'NO', POL: 'PL', SUI: 'CH', BEL: 'BE', DEN: 'DK',
   AUT: 'AT', SRB: 'RS', SVK: 'SK', CZE: 'CZ', HUN: 'HU', GRE: 'GR',
-  TUR: 'TR', UKR: 'UA', SCO: 'GB-SCT', WAL: 'GB-WLS', BIH: 'BA', SWE: 'SE',
+  TUR: 'TR', UKR: 'UA', SCO: 'GB', WAL: 'GB', BIH: 'BA', SWE: 'SE',
   // África
   MAR: 'MA', SEN: 'SN', TUN: 'TN', EGY: 'EG', ALG: 'DZ', CIV: 'CI',
   GHA: 'GH', NGA: 'NG', CMR: 'CM', RSA: 'ZA', COD: 'CD', CPV: 'CV',
