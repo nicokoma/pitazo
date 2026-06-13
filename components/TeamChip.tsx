@@ -22,7 +22,14 @@ const ISO2: Record<string, string> = {
   IRQ: 'IQ', JOR: 'JO', UZB: 'UZ', NZL: 'NZ',
 };
 
+const DIRECT_FLAGS: Record<string, string> = {
+  SCO: '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+  WAL: '🏴󠁧󠁢󠁷󠁬󠁳󠁿',
+  ENG: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+};
+
 function getFlagEmoji(code3: string): string {
+  if (DIRECT_FLAGS[code3]) return DIRECT_FLAGS[code3];
   const iso2 = ISO2[code3];
   if (!iso2) return '🏳️';
   return iso2
