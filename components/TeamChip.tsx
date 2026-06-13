@@ -24,7 +24,7 @@ const ISO2: Record<string, string> = {
 
 // Banderas PNG para equipos con emojis no soportados en Android
 const PNG_FLAGS: Record<string, any> = {
-  SCO: require('../assets/flags/escocia-emoji3.png'),
+  SCO: require('../assets/flags/escocia-emoji4.png'),
 };
 
 function getFlagEmoji(code3: string): string {
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   chip: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.06)',
+    backgroundColor: 'rgba(255,255,255,1)',
     overflow: 'hidden',
   },
 });
