@@ -48,7 +48,7 @@ export default function HomeScreen() {
         set.add(a);
       }
     });
-    return Array.from(set).sort();
+    return Array.from(set).sort((a, b) => teamName(a).localeCompare(teamName(b), 'es'));
   }, [matches]);
 
   const filteredTeams = useMemo(() =>
@@ -211,7 +211,7 @@ export default function HomeScreen() {
           {liveMatches.map(m => {
             const score = getScore(m);
             return (
-              <TouchableOpacity key={m.id} style={styles.liveHero} onPress={() => router.push(`/match/${m.id}`)}>
+              <View key={m.id} style={styles.liveHero}>
                 <View style={styles.liveHeroTop}>
                   <View style={styles.livePulse} />
                   <Text style={styles.liveHeroLabel}>EN VIVO</Text>
@@ -239,7 +239,7 @@ export default function HomeScreen() {
                     </View>
                   ))}
                 </View>
-              </TouchableOpacity>
+              </View>
             );
           })}
 
@@ -302,7 +302,7 @@ export default function HomeScreen() {
       {/* Modal selector de equipo */}
       <Modal visible={showPicker} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowPicker(false)}>
         <KeyboardAvoidingView style={styles.modal} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <View style={styles.modalHeader}>
+          <View style={[styles.modalHeader, { marginTop: 20 }]}>
             <Text style={styles.modalTitle}>Seleccioná un equipo</Text>
             <TouchableOpacity onPress={() => { setShowPicker(false); setSearch(''); }}>
               <Ionicons name="close" size={24} color={Colors.text} />
