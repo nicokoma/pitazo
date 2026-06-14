@@ -1,37 +1,61 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native'; // Text kept for fallback
+import { View, Text, Image, StyleSheet } from 'react-native';
 import { getCode } from '../constants/theme';
 
-// FIFA 3-letter → ISO 2-letter para emoji de bandera
-const ISO2: Record<string, string> = {
-  // Américas
-  ARG: 'AR', MEX: 'MX', BRA: 'BR', USA: 'US', CAN: 'CA', URU: 'UY',
-  COL: 'CO', ECU: 'EC', CHI: 'CL', PER: 'PE', VEN: 'VE', BOL: 'BO',
-  PAR: 'PY', HON: 'HN', SLV: 'SV', PAN: 'PA', JAM: 'JM', CRC: 'CR',
-  HAI: 'HT', CUW: 'CW',
-  // Europa
-  FRA: 'FR', ESP: 'ES', GER: 'DE', ENG: 'GB', POR: 'PT', NED: 'NL',
-  CRO: 'HR', NOR: 'NO', POL: 'PL', SUI: 'CH', BEL: 'BE', DEN: 'DK',
-  AUT: 'AT', SRB: 'RS', SVK: 'SK', CZE: 'CZ', HUN: 'HU', GRE: 'GR',
-  TUR: 'TR', UKR: 'UA', SCO: 'GB', WAL: 'GB', BIH: 'BA', SWE: 'SE',
-  // África
-  MAR: 'MA', SEN: 'SN', TUN: 'TN', EGY: 'EG', ALG: 'DZ', CIV: 'CI',
-  GHA: 'GH', NGA: 'NG', CMR: 'CM', RSA: 'ZA', COD: 'CD', CPV: 'CV',
-  // Asia / Oceanía
-  KSA: 'SA', JPN: 'JP', KOR: 'KR', IRN: 'IR', AUS: 'AU', QAT: 'QA',
-  IRQ: 'IQ', JOR: 'JO', UZB: 'UZ', NZL: 'NZ',
+const FLAGS: Record<string, any> = {
+  ARG: require('../assets/flags/ARG.png'),
+  MEX: require('../assets/flags/MEX.png'),
+  BRA: require('../assets/flags/BRA.png'),
+  USA: require('../assets/flags/USA.png'),
+  CAN: require('../assets/flags/CAN.png'),
+  URU: require('../assets/flags/URU.png'),
+  COL: require('../assets/flags/COL.png'),
+  ECU: require('../assets/flags/ECU.png'),
+  CHI: require('../assets/flags/CHI.png'),
+  PAR: require('../assets/flags/PAR.png'),
+  PAN: require('../assets/flags/PAN.png'),
+  HAI: require('../assets/flags/HAI.png'),
+  CUW: require('../assets/flags/CUW.png'),
+  FRA: require('../assets/flags/FRA.png'),
+  ESP: require('../assets/flags/ESP.png'),
+  GER: require('../assets/flags/GER.png'),
+  ENG: require('../assets/flags/ENG.png'),
+  POR: require('../assets/flags/POR.png'),
+  NED: require('../assets/flags/NED.png'),
+  CRO: require('../assets/flags/CRO.png'),
+  NOR: require('../assets/flags/NOR.png'),
+  SUI: require('../assets/flags/SUI.png'),
+  BEL: require('../assets/flags/BEL.png'),
+  DEN: require('../assets/flags/DEN.png'),
+  AUT: require('../assets/flags/AUT.png'),
+  SWE: require('../assets/flags/SWE.png'),
+  SCO: require('../assets/flags/SCO.png'),
+  CZE: require('../assets/flags/CZE.png'),
+  TUR: require('../assets/flags/TUR.png'),
+  BIH: require('../assets/flags/BIH.png'),
+  MAR: require('../assets/flags/MAR.png'),
+  SEN: require('../assets/flags/SEN.png'),
+  TUN: require('../assets/flags/TUN.png'),
+  EGY: require('../assets/flags/EGY.png'),
+  ALG: require('../assets/flags/ALG.png'),
+  CIV: require('../assets/flags/CIV.png'),
+  GHA: require('../assets/flags/GHA.png'),
+  NGA: require('../assets/flags/NGA.png'),
+  CMR: require('../assets/flags/CMR.png'),
+  RSA: require('../assets/flags/RSA.png'),
+  COD: require('../assets/flags/COD.png'),
+  CPV: require('../assets/flags/CPV.png'),
+  KSA: require('../assets/flags/KSA.png'),
+  JPN: require('../assets/flags/JPN.png'),
+  KOR: require('../assets/flags/KOR.png'),
+  IRN: require('../assets/flags/IRN.png'),
+  AUS: require('../assets/flags/AUS.png'),
+  QAT: require('../assets/flags/QAT.png'),
+  IRQ: require('../assets/flags/IRQ.png'),
+  JOR: require('../assets/flags/JOR.png'),
+  UZB: require('../assets/flags/UZB.png'),
+  NZL: require('../assets/flags/NZL.png'),
 };
-
-// Banderas PNG para equipos con emojis no soportados en Android
-const PNG_FLAGS: Record<string, any> = {
-  SCO: require('../assets/flags/escocia-emoji6.png'),
-};
-
-function getFlagUri(code3: string): string | null {
-  const iso2 = ISO2[code3];
-  if (!iso2) return null;
-  return `https://flagcdn.com/64x48/${iso2.toLowerCase()}.png`;
-}
 
 type Size = 'sm' | 'md' | 'lg';
 
@@ -49,15 +73,12 @@ type Props = {
 export function TeamChip({ name, size = 'md' }: Props) {
   const code = getCode(name);
   const s = sizes[size];
-  const pngFlag = PNG_FLAGS[code];
-  const flagUri = getFlagUri(code);
+  const flag = FLAGS[code];
 
   return (
     <View style={[styles.chip, { width: s.box, height: s.box, borderRadius: s.radius }]}>
-      {pngFlag ? (
-        <Image source={pngFlag} style={{ width: s.box, height: s.box, borderRadius: s.radius }} resizeMode="cover" />
-      ) : flagUri ? (
-        <Image source={{ uri: flagUri }} style={{ width: s.box, height: s.box, borderRadius: s.radius }} resizeMode="cover" />
+      {flag ? (
+        <Image source={flag} style={{ width: s.box, height: s.box, borderRadius: s.radius }} resizeMode="cover" />
       ) : (
         <Text style={{ fontSize: s.font, lineHeight: s.box }}>🏳️</Text>
       )}
