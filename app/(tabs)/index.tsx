@@ -14,7 +14,7 @@ import { TeamChip } from '../../components/TeamChip';
 import { BellButton } from '../../components/BellButton';
 import { LiveBadge } from '../../components/LiveBadge';
 import { CountdownCircles } from '../../components/CountdownCircles';
-import { useAlerts, scheduleMatchNotifs } from '../../hooks/useAlerts';
+import { useAlerts } from '../../hooks/useAlerts';
 import { useMatches, getLiveMatches, getUpcoming } from '../../hooks/useMatches';
 import { ApiMatch, getScore, isFinished, isLive } from '../../services/footballApi';
 import { getChannels } from '../../utils/channels';
@@ -22,8 +22,7 @@ import { teamName } from '../../utils/teamNames';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { isActive, toggleBell, isMuted } = useAlerts();
-  const [teamAlertsOn, setTeamAlertsOn] = useState(false);
+  const { isActive, toggleBell, isMuted, bulkSetAlerts } = useAlerts();
   const { matches, loading, error, refresh } = useMatches();
   const [countdown, setCountdown] = useState('');
   const [filterTeam, setFilterTeam] = useState<string | null>(null);
@@ -65,17 +64,19 @@ export default function HomeScreen() {
       .sort((a, b) => a.utcDate.localeCompare(b.utcDate));
   }, [matches, filterTeam]);
 
+  const upcomingTeamMatches = useMemo(
+    () => teamMatches.filter(m => new Date(m.utcDate) > new Date()),
+    [teamMatches]
+  );
+
+  const teamAlertsOn = useMemo(
+    () => upcomingTeamMatches.length > 0 && upcomingTeamMatches.every(m => !isMuted(m.id)),
+    [upcomingTeamMatches, isMuted]
+  );
+
   const toggleTeamAlerts = useCallback(async () => {
-    const upcomingTeamMatches = teamMatches.filter(m => new Date(m.utcDate) > new Date());
-    if (teamAlertsOn) {
-      setTeamAlertsOn(false);
-    } else {
-      for (const m of upcomingTeamMatches) {
-        await scheduleMatchNotifs(m.id, m.utcDate, { min15: true, kickoff: true, eachGoal: false, fullTime: false });
-      }
-      setTeamAlertsOn(true);
-    }
-  }, [teamMatches, teamAlertsOn]);
+    await bulkSetAlerts(upcomingTeamMatches.map(m => ({ id: m.id, utcDate: m.utcDate })), !teamAlertsOn);
+  }, [upcomingTeamMatches, teamAlertsOn, bulkSetAlerts]);
 
   // Partidos sin filtro (próximos)
   // Si hay partido en vivo, mostrar TODOS los próximos (no saltear el primero)

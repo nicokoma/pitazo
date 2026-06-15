@@ -79,7 +79,22 @@ export function useAlerts() {
     [muted]
   );
 
-  return { getPrefs, isActive, isMuted, toggleBell, updatePref };
+  const bulkSetAlerts = useCallback(async (matchList: { id: number; utcDate: string }[], active: boolean) => {
+    const nextMuted = new Set(muted);
+    for (const m of matchList) {
+      if (active) {
+        nextMuted.delete(m.id);
+        await scheduleMatchNotifs(m.id, m.utcDate, DEFAULT_PREFS);
+      } else {
+        nextMuted.add(m.id);
+        await cancelNotifications(m.id);
+      }
+    }
+    setMuted(nextMuted);
+    await AsyncStorage.setItem(MUTED_KEY, JSON.stringify(Array.from(nextMuted)));
+  }, [muted]);
+
+  return { getPrefs, isActive, isMuted, toggleBell, updatePref, bulkSetAlerts };
 }
 
 export async function scheduleMatchNotifs(matchId: number, dateUTC: string, p: AlertPrefs) {
