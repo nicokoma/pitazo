@@ -24,7 +24,7 @@ export default function MatchDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { matches, loading } = useMatches();
-  const { getPrefs, isActive, updatePref } = useAlerts();
+  const { getPrefs, isActive, updatePref, toggleBell } = useAlerts();
 
   const match = matches.find(m => m.id === Number(id));
 
@@ -44,8 +44,10 @@ export default function MatchDetailScreen() {
     );
   }
 
-  const prefs = getPrefs(match.id);
+  const rawPrefs = getPrefs(match.id);
   const active = isActive(match.id);
+  // Si el partido está muteado, los switches se muestran como OFF
+  const prefs = active ? rawPrefs : { min15: false, kickoff: false, eachGoal: false, fullTime: false };
   const live = isLive(match);
   const finished = isFinished(match);
   const upcoming = isUpcoming(match);
@@ -120,7 +122,10 @@ export default function MatchDetailScreen() {
                 </View>
                 <Switch
                   value={prefs[opt.key]}
-                  onValueChange={v => updatePref(match.id, opt.key, v, match.utcDate)}
+                  onValueChange={async v => {
+                    if (v && !active) await toggleBell(match.id, match.utcDate);
+                    await updatePref(match.id, opt.key, v, match.utcDate);
+                  }}
                   trackColor={{ false: Colors.surface2, true: Colors.green }}
                   thumbColor={prefs[opt.key] ? '#06210f' : Colors.muted}
                 />
@@ -158,7 +163,7 @@ export default function MatchDetailScreen() {
 
         {/* CTA */}
         {upcoming && (
-          <View style={styles.ctaPad}>
+          <View style={[styles.ctaPad, { marginTop: 5 }]}>
             <View style={[styles.cta, active ? styles.ctaActive : styles.ctaInactive]}>
               <Ionicons name={active ? 'notifications' : 'notifications-off-outline'} size={18} color={active ? '#06210f' : Colors.muted} />
               <Text style={[styles.ctaText, active ? styles.ctaTextActive : styles.ctaTextInactive]}>
