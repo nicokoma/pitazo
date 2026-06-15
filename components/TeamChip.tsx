@@ -51,6 +51,7 @@ const FLAGS: Record<string, any> = {
   IRQ: require('../assets/flags2/irak.png'),
   JOR: require('../assets/flags2/jordania.png'),
   UZB: require('../assets/flags2/uzbekistan.png'),
+  NZL: require('../assets/flags2/newzeland.png'),
 };
 
 type Size = 'sm' | 'md' | 'lg';

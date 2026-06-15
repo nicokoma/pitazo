@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useLocalSearchParams } from 'expo-router';
 import { Colors } from '../../constants/theme';
 import { teamName } from '../../utils/teamNames';
 import { TeamChip } from '../../components/TeamChip';
 import { useMatches, getGroups, computeStandings } from '../../hooks/useMatches';
 
 export default function GroupsScreen() {
+  const { group: groupParam } = useLocalSearchParams<{ group?: string }>();
   const { matches, loading } = useMatches();
   const groups = getGroups(matches);
-  const [activeGroup, setActiveGroup] = useState('A');
+  const [activeGroup, setActiveGroup] = useState(groupParam ?? 'A');
 
   const standings = computeStandings(matches, activeGroup);
 

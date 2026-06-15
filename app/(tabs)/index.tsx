@@ -14,7 +14,7 @@ import { TeamChip } from '../../components/TeamChip';
 import { BellButton } from '../../components/BellButton';
 import { LiveBadge } from '../../components/LiveBadge';
 import { CountdownCircles } from '../../components/CountdownCircles';
-import { useAlerts } from '../../hooks/useAlerts';
+import { useAlerts, scheduleMatchNotifs } from '../../hooks/useAlerts';
 import { useMatches, getLiveMatches, getUpcoming } from '../../hooks/useMatches';
 import { ApiMatch, getScore, isFinished, isLive } from '../../services/footballApi';
 import { getChannels } from '../../utils/channels';
@@ -22,7 +22,8 @@ import { teamName } from '../../utils/teamNames';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { isActive, toggleBell } = useAlerts();
+  const { isActive, toggleBell, isMuted } = useAlerts();
+  const [teamAlertsOn, setTeamAlertsOn] = useState(false);
   const { matches, loading, error, refresh } = useMatches();
   const [countdown, setCountdown] = useState('');
   const [filterTeam, setFilterTeam] = useState<string | null>(null);
@@ -63,6 +64,18 @@ export default function HomeScreen() {
       .filter(m => m.homeTeam.name === filterTeam || m.awayTeam.name === filterTeam)
       .sort((a, b) => a.utcDate.localeCompare(b.utcDate));
   }, [matches, filterTeam]);
+
+  const toggleTeamAlerts = useCallback(async () => {
+    const upcomingTeamMatches = teamMatches.filter(m => new Date(m.utcDate) > new Date());
+    if (teamAlertsOn) {
+      setTeamAlertsOn(false);
+    } else {
+      for (const m of upcomingTeamMatches) {
+        await scheduleMatchNotifs(m.id, m.utcDate, { min15: true, kickoff: true, eachGoal: false, fullTime: false });
+      }
+      setTeamAlertsOn(true);
+    }
+  }, [teamMatches, teamAlertsOn]);
 
   // Partidos sin filtro (próximos)
   // Si hay partido en vivo, mostrar TODOS los próximos (no saltear el primero)
@@ -196,6 +209,15 @@ export default function HomeScreen() {
           refreshControl={<RefreshControl refreshing={loading} onRefresh={refresh} tintColor={Colors.green} />}
         >
           <Text style={styles.sectionTitle}>{teamMatches.length} PARTIDOS · {teamName(filterTeam).toUpperCase()}</Text>
+          <TouchableOpacity
+            style={[styles.teamAlertBtn, teamAlertsOn && styles.teamAlertBtnActive]}
+            onPress={toggleTeamAlerts}
+          >
+            <Ionicons name={teamAlertsOn ? 'notifications' : 'notifications-outline'} size={18} color={teamAlertsOn ? '#06210f' : Colors.muted} />
+            <Text style={[styles.teamAlertText, teamAlertsOn && styles.teamAlertTextActive]}>
+              {teamAlertsOn ? `Alertas activadas para ${teamName(filterTeam)}` : `Alertas para todos los partidos de ${teamName(filterTeam)}`}
+            </Text>
+          </TouchableOpacity>
           {teamMatches.map(m => <MatchRow key={m.id} m={m} showDate />)}
           <View style={{ height: 100 }} />
         </ScrollView>
@@ -365,6 +387,10 @@ const styles = StyleSheet.create({
   clearBtn: { padding: 2 },
 
   sectionTitle: { color: Colors.muted, fontSize: 11, fontWeight: '700', letterSpacing: 1.5, marginTop: 16, marginBottom: 10 },
+  teamAlertBtn: { flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: Colors.surface, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, marginBottom: 12, borderWidth: 1, borderColor: Colors.line2 },
+  teamAlertBtnActive: { backgroundColor: Colors.green, borderColor: Colors.green },
+  teamAlertText: { flex: 1, color: Colors.muted, fontSize: 13, fontWeight: '600' },
+  teamAlertTextActive: { color: '#06210f' },
 
   // Partido EN VIVO — hero grande
   liveHero: { backgroundColor: Colors.liveBg, borderRadius: 18, padding: 20, marginVertical: 8, borderWidth: 1, borderColor: Colors.live },

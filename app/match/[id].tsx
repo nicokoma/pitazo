@@ -141,6 +141,21 @@ export default function MatchDetailScreen() {
           </View>
         </View>
 
+        {/* Ver grupo */}
+        {match.group && match.stage === 'GROUP_STAGE' && (
+          <View style={styles.ctaPad}>
+            <TouchableOpacity
+              style={[styles.cta, styles.ctaInactive]}
+              onPress={() => router.push(`/(tabs)/groups?group=${match.group!.replace('GROUP_', '')}`)}
+            >
+              <Ionicons name="stats-chart-outline" size={18} color={Colors.muted} />
+              <Text style={[styles.ctaText, styles.ctaTextInactive]}>
+                Ver Grupo {match.group.replace('GROUP_', '')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
         {/* CTA */}
         {upcoming && (
           <View style={styles.ctaPad}>
