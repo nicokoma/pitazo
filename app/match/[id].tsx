@@ -163,7 +163,7 @@ export default function MatchDetailScreen() {
 
         {/* CTA */}
         {(upcoming || live) && (
-          <View style={[styles.ctaPad, { marginTop: 5 }]}>
+          <View style={[styles.ctaPad, { marginTop: 12 }]}>
             <View style={[styles.cta, active ? styles.ctaActive : styles.ctaInactive]}>
               <Ionicons name={active ? 'notifications' : 'notifications-off-outline'} size={18} color={active ? '#06210f' : Colors.muted} />
               <Text style={[styles.ctaText, active ? styles.ctaTextActive : styles.ctaTextInactive]}>
