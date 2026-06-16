@@ -53,6 +53,7 @@ export default function CalendarScreen() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
+  const todayOffsetRef = useRef<number | null>(null);
   const { isActive, toggleBell } = useAlerts();
   const { matches, loading } = useMatches();
 
@@ -90,6 +91,15 @@ export default function CalendarScreen() {
   const groups = Object.keys(byGroup).sort();
   const days = Object.keys(byDay).sort();
   const todayKey = dayjs().format('YYYY-MM-DD');
+
+  // Scroll al día de hoy cuando cargan los partidos
+  React.useEffect(() => {
+    if (!loading && days.includes(todayKey) && todayOffsetRef.current !== null) {
+      setTimeout(() => {
+        scrollRef.current?.scrollTo({ y: todayOffsetRef.current!, animated: true });
+      }, 300);
+    }
+  }, [loading, days.join()]);
 
   const selectedLabel = selectedDate
     ? dayjs(selectedDate).locale('es').format('ddd D [de] MMM').toUpperCase()
@@ -273,7 +283,7 @@ export default function CalendarScreen() {
             const isToday = day === todayKey;
             const label = toART(byDay[day][0].utcDate).format('ddd DD [de] MMM').toUpperCase();
             return (
-              <View key={day}>
+              <View key={day} onLayout={isToday ? (e) => { todayOffsetRef.current = e.nativeEvent.layout.y; } : undefined}>
                 <View style={[styles.dayHeader, isToday && styles.dayHeaderToday]}>
                   <Text style={[styles.dayLabel, isToday && styles.dayLabelToday]}>{label}</Text>
                   <Text style={styles.dayCount}>{byDay[day].length} partido{byDay[day].length > 1 ? 's' : ''}</Text>
