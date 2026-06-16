@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import {
-  View, Text, ScrollView, TouchableOpacity, Switch,
+  View, Text, ScrollView, TouchableOpacity, Switch, Animated,
   StyleSheet, RefreshControl, ActivityIndicator,
   TextInput, FlatList, Modal, KeyboardAvoidingView, Platform, Image,
 } from 'react-native';
@@ -19,6 +19,19 @@ import { useMatches, getLiveMatches, getUpcoming } from '../../hooks/useMatches'
 import { ApiMatch, getScore, isFinished, isLive } from '../../services/footballApi';
 import { getChannels } from '../../utils/channels';
 import { teamName } from '../../utils/teamNames';
+
+function PulseDot() {
+  const anim = useRef(new Animated.Value(1)).current;
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(anim, { toValue: 0.2, duration: 800, useNativeDriver: true }),
+        Animated.timing(anim, { toValue: 1, duration: 800, useNativeDriver: true }),
+      ])
+    ).start();
+  }, []);
+  return <Animated.View style={[styles.livePulse, { opacity: anim }]} />;
+}
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -239,11 +252,15 @@ export default function HomeScreen() {
             return (
               <View key={m.id} style={styles.liveHero}>
                 <View style={styles.liveHeroTop}>
-                  <View style={styles.livePulse} />
+                  <PulseDot />
                   <Text style={styles.liveHeroLabel}>EN VIVO</Text>
                   <Text style={styles.liveHeroMeta}>
                     {m.group ? `GRUPO ${m.group.replace('GROUP_', '')}` : m.stage?.replace('_', ' ')}
                   </Text>
+                  <TouchableOpacity onPress={() => router.push(`/match/${m.id}`)} style={styles.liveAlertsBtn}>
+                    <Ionicons name="notifications-outline" size={16} color={Colors.live} />
+                    <Text style={styles.liveAlertsBtnText}>Alertas</Text>
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.liveHeroTeams}>
                   <View style={styles.liveHeroTeam}>
@@ -400,6 +417,8 @@ const styles = StyleSheet.create({
   livePulse: { width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.live },
   liveHeroLabel: { color: Colors.live, fontSize: 12, fontWeight: '800', letterSpacing: 1.5 },
   liveHeroMeta: { color: Colors.muted, fontSize: 11, fontWeight: '600' },
+  liveAlertsBtn: { flexDirection: 'row', alignItems: 'center', gap: 4, marginLeft: 'auto', backgroundColor: 'rgba(255,60,60,0.12)', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4 },
+  liveAlertsBtnText: { color: Colors.live, fontSize: 12, fontWeight: '700' },
   liveHeroTeams: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 },
   liveHeroTeam: { alignItems: 'center', gap: 8, flex: 1 },
   liveHeroTeamName: { color: Colors.text, fontSize: 13, fontWeight: '600', textAlign: 'center' },
