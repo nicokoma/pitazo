@@ -108,7 +108,7 @@ export default function MatchDetailScreen() {
         </View>
 
         {/* Alertas */}
-        {upcoming && (
+        {(upcoming || live) && (
           <View style={styles.card}>
             <Text style={styles.cardTitle}>AVISARME</Text>
             {ALERT_OPTIONS.map(opt => (
@@ -162,7 +162,7 @@ export default function MatchDetailScreen() {
         )}
 
         {/* CTA */}
-        {upcoming && (
+        {(upcoming || live) && (
           <View style={[styles.ctaPad, { marginTop: 5 }]}>
             <View style={[styles.cta, active ? styles.ctaActive : styles.ctaInactive]}>
               <Ionicons name={active ? 'notifications' : 'notifications-off-outline'} size={18} color={active ? '#06210f' : Colors.muted} />
